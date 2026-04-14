@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Optimasi Rute Distribusi Paket</title>
+
+    <!-- Leaflet -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: #f5f7fb;
+        color: #1f2937;
+      }
+
+      /* HEADER */
+      header {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      header img {
+        height: 48px;
+        background: white;
+        padding: 6px;
+        border-radius: 8px;
+      }
+
+      header img {
+        height: 46px;
+      }
+
+      header h1 {
+        font-size: 22px;
+        margin: 0;
+        font-weight: 600;
+      }
+
+      header span {
+        font-size: 13px;
+        opacity: 0.85;
+      }
+
+      /* CONTAINER */
+      .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 25px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* CARD */
+      .card {
+        background: white;
+        padding: 18px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .card h3 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        font-size: 17px;
+        border-left: 4px solid #2563eb;
+        padding-left: 10px;
+      }
+
+      select,
+      input[type="file"],
+      button {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        margin: 6px 0;
+      }
+
+      button {
+        background: #2563eb;
+        color: white;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #1d4ed8;
+      }
+
+      .summary p {
+        margin: 6px 0;
+        font-size: 14px;
+      }
+
+      .summary hr {
+        margin: 10px 0;
+      }
+
+      #map {
+        height: 450px;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+      }
+
+      /* FOOTER 
+      footer {
+        margin-top: 40px;
+        padding: 15px;
+        background: #1f2937;
+        color: #d1d5db;
+        text-align: center;
+        font-size: 13px;
+      }
+
+      footer b {
+        color: white;
+      }
+        */
+    </style>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header>
+      <div style="display: flex; align-items: center; gap: 15px">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" />
+        <div>
+          <h1>Sistem Optimasi Rute Pengiriman Paket</h1>
+          <span>PT. POS INDONESIA (PERSERO) KCU MALANG</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="grid">
+        <!-- FORM INPUT -->
+        <div class="card">
+          <h3>Input Data Distribusi</h3>
+
+          <!-- upload form: hanya muncul saat belum ada file tersimpan -->
+          {% if not uploaded_file_name %}
+          <form method="POST" enctype="multipart/form-data">
+            <label>Upload File Excel</label>
+            <input type="file" name="file" />
+            <button type="submit" name="upload">Upload</button>
+          </form>
+          {% else %}
+          <form method="POST" action="{{ url_for('reset') }}">
+            <button type="submit">Upload File</button>
+          </form>
+          {% endif %}
+
+          <!-- optimization form only shown after file has been uploaded -->
+          {% if petugas_list %}
+          <form method="POST">
+            <label>Pilih Petugas</label>
+            <select name="petugas" required>
+              <option value="">-- Pilih Petugas --</option>
+              {% for p in petugas_list %}
+              <option value="{{ p }}">{{ p }}</option>
+              {% endfor %}
+            </select>
+
+            <label>Pilih Tanggal Kirim</label>
+            <select name="tgl" required>
+              <option value="">-- Pilih Tanggal --</option>
+              {% for t in tgl_list %}
+              <option value="{{ t }}">{{ t }}</option>
+              {% endfor %}
+            </select>
+
+            <button type="submit" name="optimize">Proses Optimasi</button>
+          </form>
+          {% endif %}
+        </div>
+
+        <!-- HASIL -->
+        {% if result %}
+        <div class="card summary">
+          <h3>Hasil Optimasi</h3>
+
+          <p><b>Petugas:</b> {{ result.petugas }}</p>
+          <p><b>Tanggal:</b> {{ result.tanggal }}</p>
+          <p><b>Kota:</b> {{ result.kota }}</p>
+          <p><b>Jumlah Paket:</b> {{ result.jumlah }}</p>
+
+          <hr />
+
+          <p><b>Rute Optimal:</b></p>
+
+          <table
+            style="width: 100%; border-collapse: collapse; font-size: 14px"
+          >
+            <thead>
+              <tr style="background: #f3f4f6">
+                <th style="border: 1px solid #ddd; padding: 8px">No</th>
+                <th style="border: 1px solid #ddd; padding: 8px">Alamat</th>
+                <th style="border: 1px solid #ddd; padding: 8px">No Resi</th>
+                <th style="border: 1px solid #ddd; padding: 8px">
+                  Nama Penerima
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in result.route_data %}
+              <tr>
+                <td style="border: 1px solid #ddd; padding: 8px">{{ r.no }}</td>
+                <td style="border: 1px solid #ddd; padding: 8px">
+                  {{ r.alamat }}
+                </td>
+                <td style="border: 1px solid #ddd; padding: 8px">
+                  {{ r.resi }}
+                </td>
+                <td style="border: 1px solid #ddd; padding: 8px">
+                  {{ r.nama }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <p><b>Total Jarak:</b> {{ result.distance }} km</p>
+          <p><b>Total Waktu:</b> {{ result.time }} menit</p>
+        </div>
+        {% endif %}
+      </div>
+
+      {% if result %}
+      <div class="card" style="margin-top: 20px">
+        <h3>Peta Visualisasi Rute</h3>
+        <div id="map"></div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- FOOTER -->
+    <footer></footer>
+
+    {% if result %}
+    <script id="points-data" type="application/json">
+      {{ map_points | tojson }}
+    </script>
+
+    <script>
+      const points = JSON.parse(
+        document.getElementById("points-data").textContent,
+      );
+      const map = L.map("map");
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+        map,
+      );
+
+      const latlngs = [];
+
+      points.forEach((p, i) => {
+        const latlng = [p.lat, p.lng];
+        latlngs.push(latlng);
+        const icon = L.divIcon({
+          html: `<div style="
+    background:#2563eb;
+    color:white;
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:600;
+    border:2px solid white;
+    box-shadow:0 0 5px rgba(0,0,0,.4);
+  ">${p.order}</div>`,
+          className: "",
+        });
+
+        L.marker(latlng, { icon })
+          .addTo(map)
+          .bindPopup(`<b>${i + 1}. ${p.name}</b>`);
+      });
+
+      L.polyline(latlngs, { weight: 4 }).addTo(map);
+      map.fitBounds(latlngs, { padding: [40, 40] });
+    </script>
+    {% endif %}
+  </body>
+</html>
