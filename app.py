@@ -3701,7 +3701,9 @@ def hasil_pemetaan():
     )
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    port = int(os.environ.get("PORT", "5000"))
+    debug = os.environ.get("FLASK_DEBUG", "").strip().lower() in {"1", "true", "yes", "y"}
+    app.run(host="0.0.0.0", port=port, debug=debug, use_reloader=False)
 #         tgl_list = sorted(df["Tgl_Kirim"].dropna().astype(str).unique())
 
 #     return render_template(
