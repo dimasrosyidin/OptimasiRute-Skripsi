@@ -1,0 +1,399 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Master Penugasan Kurir</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+      body {
+        margin: 0;
+        background: #f5f7fb;
+        color: #1f2937;
+      }
+      header {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      header .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      header img {
+        height: 48px;
+        background: white;
+        padding: 6px;
+        border-radius: 8px;
+      }
+      header nav {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      header nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        display: block;
+      }
+      header nav a:hover,
+      header nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown {
+        position: relative;
+      }
+      .nav-trigger {
+        border: none;
+        background: transparent;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        display: block;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .nav-trigger:hover,
+      .nav-trigger.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown.open .nav-trigger {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 220px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+        padding: 8px;
+        z-index: 10;
+      }
+      .nav-dropdown.align-right .nav-menu {
+        left: auto;
+        right: 0;
+      }
+      .nav-menu a {
+        color: #1f2937;
+      }
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        background: #eff6ff;
+      }
+      .nav-dropdown.open .nav-menu {
+        display: block;
+      }
+      @media (max-width: 900px) {
+        header {
+          align-items: flex-start;
+          gap: 16px;
+          flex-direction: column;
+        }
+        header nav {
+          width: 100%;
+          gap: 12px;
+        }
+        header nav > a,
+        .nav-dropdown {
+          width: 100%;
+        }
+        header nav a,
+        .nav-trigger {
+          width: 100%;
+          text-align: left;
+        }
+        .nav-menu {
+          position: static;
+          margin-top: 8px;
+          width: 100%;
+        }
+      }
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 30px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 24px;
+      }
+      .card {
+        background: white;
+        padding: 24px;
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      }
+      label {
+        display: block;
+        margin-top: 12px;
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+      input,
+      select,
+      button {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid #d1d5db;
+        font-size: 14px;
+      }
+      button {
+        border: none;
+        background: #0f766e;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0d5f59;
+      }
+      .btn-secondary {
+        background: #2563eb;
+      }
+      .btn-danger {
+        background: #dc2626;
+      }
+      .error {
+        background: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 14px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th,
+      td {
+        border: 1px solid #e5e7eb;
+        padding: 10px;
+        text-align: left;
+      }
+      thead tr {
+        background: #f3f4f6;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+      .actions a,
+      .actions button {
+        width: auto;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        text-decoration: none;
+      }
+      .actions a {
+        background: #2563eb;
+        color: white;
+      }
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .tag {
+        background: #dbeafe;
+        color: #1d4ed8;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      @media (max-width: 960px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% include "header.html" %}
+
+    <main>
+      <div class="grid">
+        <section class="card">
+          <h2 style="margin-top: 0; color: #0f766e">Input Manual Penugasan</h2>
+          <p>
+            Tambahkan nama kurir dan wilayah penugasan secara manual. Data ini
+            dipakai oleh fitur pemetaan.
+          </p>
+
+          {% if error %}
+          <div class="error">{{ error }}</div>
+          {% endif %}
+
+          <form method="post">
+            <input
+              type="hidden"
+              name="action"
+              value="{% if edit_item %}update{% else %}create{% endif %}"
+            />
+            <input
+              type="hidden"
+              name="id"
+              value="{{ edit_item.id if edit_item else '' }}"
+            />
+
+            <label for="petugas">Nama Kurir</label>
+            <input
+              type="text"
+              id="petugas"
+              name="petugas"
+              value="{{ edit_item.petugas if edit_item else '' }}"
+              placeholder="Contoh: Lukman Amier"
+              required
+            />
+
+            <label for="penugasan">Wilayah Penugasan</label>
+            <select id="penugasan" name="penugasan" required>
+              <option value="">-- Pilih Wilayah --</option>
+              <optgroup label="Kecamatan (semua kelurahan otomatis ikut)">
+                {% for kecamatan in kecamatan_options %}
+                <option
+                  value="{{ kecamatan }}"
+                  {% if edit_item and edit_item.penugasan == kecamatan %}selected{% endif %}
+                >
+                  {{ kecamatan }}
+                </option>
+                {% endfor %}
+              </optgroup>
+              <optgroup label="Kelurahan">
+              {% for wilayah in wilayah_options %}
+              <option
+                value="{{ wilayah }}"
+                {% if edit_item and edit_item.penugasan == wilayah %}selected{% endif %}
+              >
+                {{ wilayah }}
+              </option>
+              {% endfor %}
+              </optgroup>
+            </select>
+
+            <button type="submit" style="margin-top: 16px">
+              {% if edit_item %}Simpan Perubahan{% else %}Tambah Penugasan{% endif %}
+            </button>
+          </form>
+
+          {% if edit_item %}
+          <a
+            href="/input-penugasan"
+            style="
+              display: inline-block;
+              margin-top: 12px;
+              color: #2563eb;
+              text-decoration: none;
+            "
+            >Batal edit</a
+          >
+          {% endif %}
+
+          <div style="margin-top: 24px">
+            <h3 style="color: #1e3a8a">Ringkasan Kurir</h3>
+            {% if assignment_summary %} {% for petugas, areas in
+            assignment_summary.items() %}
+            <div style="margin-bottom: 14px">
+              <strong>{{ petugas }}</strong>
+              <div class="tag-list" style="margin-top: 8px">
+                {% for area in areas %}
+                <span class="tag">{{ area }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <p>Belum ada data penugasan.</p>
+            {% endif %}
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 style="margin-top: 0; color: #1e3a8a">Daftar Penugasan</h2>
+          {% if assignments %}
+          <table>
+            <thead>
+              <tr>
+                <th>Nama Kurir</th>
+                <th>Wilayah</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in assignments %}
+              <tr>
+                <td>{{ item.petugas }}</td>
+                <td>{{ item.penugasan }}</td>
+                <td>
+                  <div class="actions">
+                    <a href="{{ url_for('input_penugasan', edit_id=item.id) }}"
+                      >Edit</a
+                    >
+                    <form method="post" style="margin: 0">
+                      <input type="hidden" name="action" value="delete" />
+                      <input type="hidden" name="id" value="{{ item.id }}" />
+                      <button type="submit" class="btn-danger">Hapus</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <p>Belum ada data master penugasan kurir.</p>
+          {% endif %}
+        </section>
+      </div>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = document.querySelectorAll(".nav-dropdown");
+
+        dropdowns.forEach((dropdown) => {
+          const trigger = dropdown.querySelector(".nav-trigger");
+          if (!trigger) return;
+
+          trigger.addEventListener("click", function (event) {
+            event.stopPropagation();
+            dropdowns.forEach((item) => {
+              if (item !== dropdown) {
+                item.classList.remove("open");
+              }
+            });
+            dropdown.classList.toggle("open");
+          });
+        });
+
+        document.addEventListener("click", function () {
+          dropdowns.forEach((dropdown) => dropdown.classList.remove("open"));
+        });
+      });
+    </script>
+  </body>
+</html>

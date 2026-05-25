@@ -1,0 +1,982 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Optimasi Rute Distribusi Paket - Home</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: #f5f7fb;
+        color: #1f2937;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes drawRoute {
+        from {
+          clip-path: inset(0 100% 0 0);
+        }
+        to {
+          clip-path: inset(0 0 0 0);
+        }
+      }
+
+      @keyframes pulsePin {
+        0%,
+        100% {
+          transform: scale(1);
+          box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+        }
+        50% {
+          transform: scale(1.08);
+          box-shadow: 0 16px 30px rgba(37, 99, 235, 0.24);
+        }
+      }
+
+      @keyframes softFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      /* HEADER */
+      header {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      header .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      header img {
+        height: 48px;
+        background: white;
+        padding: 6px;
+        border-radius: 8px;
+      }
+      header nav {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      header nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: background 0.3s;
+        display: block;
+      }
+      header nav a:hover,
+      header nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown {
+        position: relative;
+      }
+      .nav-trigger {
+        border: none;
+        background: transparent;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: background 0.3s;
+        display: block;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .nav-trigger:hover,
+      .nav-trigger.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown.open .nav-trigger {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 220px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+        padding: 8px;
+        z-index: 10;
+      }
+      .nav-dropdown.align-right .nav-menu {
+        left: auto;
+        right: 0;
+      }
+      .nav-menu a {
+        color: #1f2937;
+      }
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        background: #eff6ff;
+      }
+      .nav-dropdown.open .nav-menu {
+        display: block;
+      }
+      @media (max-width: 900px) {
+        header {
+          align-items: flex-start;
+          gap: 16px;
+          flex-direction: column;
+        }
+        header nav {
+          width: 100%;
+          gap: 12px;
+        }
+        header nav > a,
+        .nav-dropdown {
+          width: 100%;
+        }
+        header nav a,
+        .nav-trigger {
+          width: 100%;
+          text-align: left;
+        }
+        .nav-menu {
+          position: static;
+          margin-top: 8px;
+          width: 100%;
+        }
+      }
+
+      main {
+        background: #f5f7fb;
+      }
+
+      .section {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 72px 30px;
+      }
+
+      .hero {
+        min-height: calc(100vh - 84px);
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+        gap: 44px;
+        align-items: center;
+        padding-top: 58px;
+        padding-bottom: 42px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: #b91c1c;
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        animation: fadeUp 0.7s ease both;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ef4444;
+      }
+
+      .hero h1 {
+        color: #102a56;
+        font-size: 54px;
+        line-height: 1.04;
+        margin: 0 0 22px;
+        max-width: 760px;
+        animation: fadeUp 0.75s ease 0.08s both;
+      }
+
+      .hero p {
+        color: #475569;
+        font-size: 18px;
+        line-height: 1.8;
+        margin: 0;
+        max-width: 660px;
+        animation: fadeUp 0.75s ease 0.16s both;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 32px;
+        animation: fadeUp 0.75s ease 0.24s both;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 13px 22px;
+        border-radius: 8px;
+        font-weight: 700;
+        text-decoration: none;
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-primary {
+        background: #dc2626;
+        color: white;
+        box-shadow: 0 12px 24px rgba(220, 38, 38, 0.2);
+      }
+
+      .btn-primary:hover {
+        background: #b91c1c;
+      }
+
+      .btn-secondary {
+        background: white;
+        border: 1px solid #cbd5e1;
+        color: #102a56;
+      }
+
+      .btn-secondary:hover {
+        border-color: #2563eb;
+        color: #1d4ed8;
+      }
+
+      .hero-visual {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: 0 24px 70px rgba(15, 23, 42, 0.14);
+        overflow: hidden;
+        animation:
+          fadeUp 0.8s ease 0.24s both,
+          softFloat 5s ease-in-out 1.1s infinite;
+      }
+
+      .visual-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .visual-header img {
+        width: 52px;
+        height: 52px;
+        object-fit: contain;
+      }
+
+      .visual-header strong {
+        display: block;
+        color: #102a56;
+        font-size: 17px;
+      }
+
+      .visual-header span {
+        color: #64748b;
+        font-size: 13px;
+      }
+
+      .visual-body {
+        padding: 22px;
+      }
+
+      .route-board {
+        position: relative;
+        min-height: 300px;
+        background:
+          linear-gradient(
+            90deg,
+            rgba(226, 232, 240, 0.72) 1px,
+            transparent 1px
+          ),
+          linear-gradient(0deg, rgba(226, 232, 240, 0.72) 1px, transparent 1px),
+          #f8fafc;
+        background-size: 44px 44px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+      }
+
+      .route-line {
+        position: absolute;
+        inset: 62px 70px 74px 64px;
+        border: 3px solid #2563eb;
+        border-left-color: transparent;
+        border-bottom-color: #0f766e;
+        border-radius: 8px 70px 70px 8px;
+        animation: drawRoute 1.2s ease 0.8s both;
+      }
+
+      .pin {
+        position: absolute;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: white;
+        border: 7px solid #2563eb;
+        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+        animation: pulsePin 2.8s ease-in-out infinite;
+      }
+
+      .pin.start {
+        left: 44px;
+        top: 52px;
+        border-color: #dc2626;
+      }
+
+      .pin.one {
+        right: 82px;
+        top: 46px;
+      }
+
+      .pin.two {
+        right: 44px;
+        bottom: 74px;
+        border-color: #0f766e;
+      }
+
+      .pin.three {
+        left: 74px;
+        bottom: 44px;
+        border-color: #f59e0b;
+      }
+
+      .metric-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .metric {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 14px;
+        transition:
+          transform 0.22s ease,
+          border-color 0.22s ease,
+          box-shadow 0.22s ease;
+      }
+
+      .metric:hover {
+        transform: translateY(-3px);
+        border-color: #bfdbfe;
+        box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+      }
+
+      .metric strong {
+        display: block;
+        color: #102a56;
+        font-size: 22px;
+      }
+
+      .metric span {
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .section-title {
+        max-width: 760px;
+        margin-bottom: 32px;
+      }
+
+      .section-title span {
+        color: #dc2626;
+        font-weight: 800;
+        font-size: 13px;
+        text-transform: uppercase;
+      }
+
+      .section-title h2 {
+        color: #102a56;
+        font-size: 36px;
+        line-height: 1.2;
+        margin: 10px 0 12px;
+      }
+
+      .section-title p {
+        color: #64748b;
+        line-height: 1.75;
+        margin: 0;
+      }
+
+      .profile-band {
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .profile-grid {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 34px;
+        align-items: start;
+      }
+
+      .profile-card,
+      .service-card,
+      .step-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 24px;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+        transition:
+          transform 0.24s ease,
+          border-color 0.24s ease,
+          box-shadow 0.24s ease;
+      }
+
+      .profile-card:hover,
+      .service-card:hover,
+      .step-card:hover {
+        transform: translateY(-5px);
+        border-color: #bfdbfe;
+        box-shadow: 0 18px 34px rgba(15, 23, 42, 0.1);
+      }
+
+      .profile-card {
+        background: #102a56;
+        color: white;
+      }
+
+      .profile-card img {
+        width: 72px;
+        height: 72px;
+        object-fit: contain;
+        background: white;
+        border-radius: 8px;
+        padding: 8px;
+        margin-bottom: 18px;
+      }
+
+      .profile-card h3 {
+        margin: 0 0 12px;
+        font-size: 24px;
+      }
+
+      .profile-card p {
+        color: #dbeafe;
+        line-height: 1.75;
+        margin: 0;
+      }
+
+      .profile-list {
+        display: grid;
+        gap: 14px;
+      }
+
+      .profile-item {
+        display: grid;
+        grid-template-columns: 42px 1fr;
+        gap: 14px;
+        align-items: start;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 18px;
+        transition:
+          transform 0.24s ease,
+          border-color 0.24s ease,
+          background 0.24s ease;
+      }
+
+      .profile-item:hover {
+        transform: translateX(4px);
+        border-color: #bfdbfe;
+        background: white;
+      }
+
+      .profile-item span {
+        display: inline-flex;
+        width: 42px;
+        height: 42px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: #fee2e2;
+        color: #b91c1c;
+        font-weight: 800;
+      }
+
+      .profile-item h3 {
+        color: #102a56;
+        margin: 0 0 6px;
+      }
+
+      .profile-item p {
+        color: #64748b;
+        line-height: 1.65;
+        margin: 0;
+      }
+
+      .services {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .service-card h3,
+      .step-card h3 {
+        color: #102a56;
+        margin: 0 0 10px;
+      }
+
+      .service-card p,
+      .step-card p {
+        color: #64748b;
+        line-height: 1.7;
+        margin: 0;
+      }
+
+      .service-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 8px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        margin-bottom: 18px;
+        transition:
+          transform 0.24s ease,
+          background 0.24s ease;
+      }
+
+      .service-card:hover .service-icon {
+        transform: rotate(-4deg) scale(1.06);
+        background: #dbeafe;
+      }
+
+      .workflow-band {
+        background: #0f172a;
+      }
+
+      .workflow-band .section-title h2,
+      .workflow-band .step-card h3 {
+        color: white;
+      }
+
+      .workflow-band .section-title p,
+      .workflow-band .step-card p {
+        color: #cbd5e1;
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .step-card {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.14);
+        box-shadow: none;
+      }
+
+      .step-card:hover {
+        border-color: rgba(251, 191, 36, 0.7);
+        box-shadow: 0 18px 34px rgba(0, 0, 0, 0.16);
+      }
+
+      .step-number {
+        color: #fbbf24;
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 18px;
+      }
+
+      .cta-section {
+        background: white;
+      }
+
+      .cta-panel {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 24px;
+        align-items: center;
+        background: #102a56;
+        color: white;
+        border-radius: 8px;
+        padding: 34px;
+        animation: fadeUp 0.8s ease both;
+      }
+
+      .profile-card,
+      .profile-item,
+      .service-card,
+      .step-card {
+        animation: fadeUp 0.75s ease both;
+      }
+
+      .profile-item:nth-child(2),
+      .service-card:nth-child(2),
+      .step-card:nth-child(2) {
+        animation-delay: 0.08s;
+      }
+
+      .profile-item:nth-child(3),
+      .service-card:nth-child(3),
+      .step-card:nth-child(3) {
+        animation-delay: 0.16s;
+      }
+
+      .step-card:nth-child(4) {
+        animation-delay: 0.24s;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      .cta-panel h2 {
+        margin: 0 0 10px;
+        font-size: 30px;
+      }
+
+      .cta-panel p {
+        color: #dbeafe;
+        line-height: 1.7;
+        margin: 0;
+        max-width: 720px;
+      }
+
+      .cta-panel .btn-primary {
+        background: #f59e0b;
+        color: #111827;
+        box-shadow: none;
+      }
+
+      .cta-panel .btn-primary:hover {
+        background: #d97706;
+      }
+
+      @media (max-width: 980px) {
+        .hero,
+        .profile-grid,
+        .cta-panel {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          min-height: auto;
+        }
+
+        .services,
+        .steps {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 640px) {
+        .section {
+          padding: 48px 20px;
+        }
+
+        .hero h1 {
+          font-size: 38px;
+        }
+
+        .hero p {
+          font-size: 16px;
+        }
+
+        .hero-visual {
+          min-width: 0;
+        }
+
+        .metric-strip,
+        .services,
+        .steps {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% include "header.html" %}
+
+    <main>
+      <section class="section hero">
+        <div>
+          <div class="eyebrow">Sistem Distribusi Paket Kota Malang</div>
+          <h1>
+            Optimasi Rute Distribusi Paket untuk Operasional yang Lebih Efisien
+          </h1>
+          <p>
+            Platform ini membantu proses penugasan kurir, pemetaan wilayah, dan
+            penyusunan rute pengiriman menggunakan algoritma genetika sehingga
+            pengambilan keputusan operasional menjadi lebih terukur.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/input-pemetaan">Mulai Optimasi</a>
+            <a class="btn btn-secondary" href="/input-penugasan">
+              Kelola Penugasan
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="visual-header">
+            <img
+              src="{{ url_for('static', filename='img/logo.png') }}"
+              alt="Logo"
+            />
+            <div>
+              <strong>POS KCU Malang</strong>
+              <span>Dashboard rute distribusi paket</span>
+            </div>
+          </div>
+          <div class="visual-body">
+            <div class="route-board">
+              <div class="route-line"></div>
+              <span class="pin start"></span>
+              <span class="pin one"></span>
+              <span class="pin two"></span>
+              <span class="pin three"></span>
+            </div>
+            <div class="metric-strip">
+              <div class="metric">
+                <strong>GA</strong>
+                <span>Metode optimasi</span>
+              </div>
+              <div class="metric">
+                <strong>Maps</strong>
+                <span>Visualisasi rute</span>
+              </div>
+              <div class="metric">
+                <strong>Excel/CSV</strong>
+                <span>Input operasional</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="profile-band">
+        <div class="section profile-grid">
+          <div class="profile-card">
+            <img
+              src="{{ url_for('static', filename='img/logo.png') }}"
+              alt="Logo"
+            />
+            <h3>Profil Sistem</h3>
+            <p>
+              Sistem optimasi ini dirancang untuk mendukung kebutuhan distribusi
+              paket pada area Kota Malang dengan pengelolaan data historis dan
+              data aktual dalam satu alur kerja yang rapi.
+            </p>
+          </div>
+          <div class="profile-list">
+            <div class="profile-item">
+              <span>01</span>
+              <div>
+                <h3>Berbasis Wilayah Penugasan</h3>
+                <p>
+                  Kurir dapat dipetakan ke wilayah tertentu sehingga pembagian
+                  alamat lebih sesuai dengan cakupan kerja harian.
+                </p>
+              </div>
+            </div>
+            <div class="profile-item">
+              <span>02</span>
+              <div>
+                <h3>Optimasi Rute Terukur</h3>
+                <p>
+                  Perhitungan mempertimbangkan jarak dan waktu tempuh untuk
+                  membantu menemukan urutan kunjungan yang lebih efisien.
+                </p>
+              </div>
+            </div>
+            <div class="profile-item">
+              <span>03</span>
+              <div>
+                <h3>Siap untuk Evaluasi</h3>
+                <p>
+                  Hasil rute, total jarak, total waktu, dan detail paket dapat
+                  digunakan sebagai bahan evaluasi proses distribusi.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <span>Layanan Sistem</span>
+          <h2>Fitur utama untuk mendukung proses pengiriman paket</h2>
+          <p>
+            Setiap modul dibuat untuk membantu operator mengelola data,
+            menjalankan optimasi, dan membaca hasil rute dengan lebih cepat.
+          </p>
+        </div>
+        <div class="services">
+          <div class="service-card">
+            <div class="service-icon">A</div>
+            <h3>Data Historis</h3>
+            <p>
+              Unggah data sebelumnya untuk melihat hasil optimasi berdasarkan
+              tanggal dan kurir tertentu.
+            </p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">B</div>
+            <h3>Data Aktual</h3>
+            <p>
+              Kelola penugasan kurir dan proses file pemetaan untuk kebutuhan
+              operasional yang sedang berjalan.
+            </p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">C</div>
+            <h3>Visualisasi Rute</h3>
+            <p>
+              Tampilkan urutan kunjungan, posisi alamat, dan tautan navigasi
+              untuk membantu pelaksanaan pengiriman.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="workflow-band">
+        <div class="section">
+          <div class="section-title">
+            <span>Alur Kerja</span>
+            <h2>Proses yang sederhana dari data hingga rute siap digunakan</h2>
+            <p>
+              Sistem menjaga proses tetap terstruktur agar operator dapat fokus
+              pada validasi data dan hasil optimasi.
+            </p>
+          </div>
+          <div class="steps">
+            <div class="step-card">
+              <div class="step-number">01</div>
+              <h3>Input Data</h3>
+              <p>Masukkan data paket atau unggah file sesuai kebutuhan.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">02</div>
+              <h3>Atur Kurir</h3>
+              <p>Tentukan penugasan wilayah untuk masing-masing kurir.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">03</div>
+              <h3>Hitung Rute</h3>
+              <p>Jalankan optimasi untuk menyusun urutan kunjungan terbaik.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">04</div>
+              <h3>Lihat Hasil</h3>
+              <p>Gunakan ringkasan dan peta rute sebagai acuan distribusi.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section cta-section">
+        <div class="cta-panel">
+          <div>
+            <h2>Siap mengelola rute distribusi hari ini?</h2>
+            <p>
+              Mulai dari penugasan kurir, unggah data pemetaan, lalu jalankan
+              optimasi untuk mendapatkan rute pengiriman yang lebih terarah.
+            </p>
+          </div>
+          <a class="btn btn-primary" href="/input-pemetaan">Buka Pemetaan</a>
+        </div>
+      </section>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = document.querySelectorAll(".nav-dropdown");
+
+        dropdowns.forEach((dropdown) => {
+          const trigger = dropdown.querySelector(".nav-trigger");
+          if (!trigger) return;
+
+          trigger.addEventListener("click", function (event) {
+            event.stopPropagation();
+            dropdowns.forEach((item) => {
+              if (item !== dropdown) {
+                item.classList.remove("open");
+              }
+            });
+            dropdown.classList.toggle("open");
+          });
+        });
+
+        document.addEventListener("click", function () {
+          dropdowns.forEach((dropdown) => dropdown.classList.remove("open"));
+        });
+      });
+    </script>
+  </body>
+</html>

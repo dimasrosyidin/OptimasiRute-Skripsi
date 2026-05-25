@@ -1,0 +1,276 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Input Data Pemetaan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+      body {
+        margin: 0;
+        background: #f5f7fb;
+        color: #1f2937;
+      }
+      header {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      header .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      header img {
+        height: 48px;
+        background: white;
+        padding: 6px;
+        border-radius: 8px;
+      }
+      header nav {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      header nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        display: block;
+      }
+      header nav a:hover,
+      header nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown {
+        position: relative;
+      }
+      .nav-trigger {
+        border: none;
+        background: transparent;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        display: block;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .nav-trigger:hover,
+      .nav-trigger.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown.open .nav-trigger {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 220px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+        padding: 8px;
+        z-index: 10;
+      }
+      .nav-dropdown.align-right .nav-menu {
+        left: auto;
+        right: 0;
+      }
+      .nav-menu a {
+        color: #1f2937;
+      }
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        background: #eff6ff;
+      }
+      .nav-dropdown.open .nav-menu {
+        display: block;
+      }
+      @media (max-width: 900px) {
+        header {
+          align-items: flex-start;
+          gap: 16px;
+          flex-direction: column;
+        }
+        header nav {
+          width: 100%;
+          gap: 12px;
+        }
+        header nav > a,
+        .nav-dropdown {
+          width: 100%;
+        }
+        header nav a,
+        .nav-trigger {
+          width: 100%;
+          text-align: left;
+        }
+        .nav-menu {
+          position: static;
+          margin-top: 8px;
+          width: 100%;
+        }
+      }
+      main {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 30px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 24px;
+      }
+      .card {
+        background: white;
+        padding: 28px;
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      }
+      input[type="file"],
+      button {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+      input[type="file"] {
+        border: 2px dashed #cbd5e1;
+        background: #f8fafc;
+        margin: 16px 0;
+      }
+      button {
+        border: none;
+        background: #0f766e;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .error {
+        background: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 16px;
+      }
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .tag {
+        background: #ccfbf1;
+        color: #115e59;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% include "header.html" %}
+
+    <main>
+      <div class="grid">
+        <section class="card">
+          <h2 style="margin-top: 0; color: #0f766e">Upload Data Aktual</h2>
+          <p>
+            Upload file Excel atau CSV. Pada tahap ini sistem hanya membaca
+            data alamat dan kolom kota, lalu membagi alamat ke kurir berdasarkan
+            master penugasan manual.
+          </p>
+
+          {% if error %}
+          <div class="error">{{ error }}</div>
+          {% endif %}
+
+          <form
+            method="post"
+            enctype="multipart/form-data"
+            data-loading-text="Mengunggah dan membagi alamat ke kurir..."
+          >
+            <input type="file" name="file" accept=".csv,.xlsx,.xls" required />
+            <label style="display: block; margin: 10px 0 14px; font-size: 14px; color: #334155">
+              <input type="checkbox" name="fast_mode" {% if fast_mode %}checked{% endif %} />
+              Mode cepat (tanpa geocoding saat pembagian, proses lebih cepat)
+            </label>
+            <button type="submit">Upload dan Bagi Alamat</button>
+          </form>
+        </section>
+
+        <aside class="card">
+          <h2 style="margin-top: 0; color: #1e3a8a">Kondisi Saat Ini</h2>
+          {% if uploaded_file_name %}
+          <p><b>File pemetaan aktif:</b> {{ uploaded_file_name }}</p>
+          {% else %}
+          <p>Belum ada file pemetaan yang diunggah.</p>
+          {% endif %}
+
+          <!-- 
+          <h3 style="margin-top: 24px; color: #1e3a8a">Master Penugasan Aktif</h3>
+          {% if assignment_summary %}
+          {% for petugas, areas in assignment_summary.items() %}
+          <p style="margin-bottom: 4px"><b>{{ petugas }}</b></p>
+          <div class="tag-list" style="margin-bottom: 12px">
+            {% for area in areas %}
+            <span class="tag">{{ area }}</span>
+            {% endfor %}
+          </div>
+          {% endfor %}
+          {% else %}
+          <p>Belum ada master penugasan. Tambahkan dulu di menu Penugasan Kurir.</p>
+          {% endif %}This part of the code is responsible for displaying information about the active
+         assignments for couriers. Here's a breakdown of what it does: -->
+        </aside>
+      </div>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = document.querySelectorAll(".nav-dropdown");
+
+        dropdowns.forEach((dropdown) => {
+          const trigger = dropdown.querySelector(".nav-trigger");
+          if (!trigger) return;
+
+          trigger.addEventListener("click", function (event) {
+            event.stopPropagation();
+            dropdowns.forEach((item) => {
+              if (item !== dropdown) {
+                item.classList.remove("open");
+              }
+            });
+            dropdown.classList.toggle("open");
+          });
+        });
+
+        document.addEventListener("click", function () {
+          dropdowns.forEach((dropdown) => dropdown.classList.remove("open"));
+        });
+      });
+    </script>
+  </body>
+</html>

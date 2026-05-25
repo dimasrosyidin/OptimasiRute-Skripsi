@@ -1,0 +1,733 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hasil Pemetaan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+      body {
+        margin: 0;
+        background: #f5f7fb;
+        color: #1f2937;
+      }
+      header {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      header .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      header img {
+        height: 48px;
+        background: white;
+        padding: 6px;
+        border-radius: 8px;
+      }
+      header nav {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      header nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        display: block;
+      }
+      header nav a:hover,
+      header nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown {
+        position: relative;
+      }
+      .nav-trigger {
+        border: none;
+        background: transparent;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        display: block;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .nav-trigger:hover,
+      .nav-trigger.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown.open .nav-trigger {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 220px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+        padding: 8px;
+        z-index: 10;
+      }
+      .nav-dropdown.align-right .nav-menu {
+        left: auto;
+        right: 0;
+      }
+      .nav-menu a {
+        color: #1f2937;
+      }
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        background: #eff6ff;
+      }
+      .nav-dropdown.open .nav-menu {
+        display: block;
+      }
+      @media (max-width: 900px) {
+        header {
+          align-items: flex-start;
+          gap: 16px;
+          flex-direction: column;
+        }
+        header nav {
+          width: 100%;
+          gap: 12px;
+        }
+        header nav > a,
+        .nav-dropdown {
+          width: 100%;
+        }
+        header nav a,
+        .nav-trigger {
+          width: 100%;
+          text-align: left;
+        }
+        .nav-menu {
+          position: static;
+          margin-top: 8px;
+          width: 100%;
+        }
+      }
+      .container {
+        max-width: 1450px;
+        margin: auto;
+        padding: 24px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 20px;
+      }
+      .card {
+        background: white;
+        padding: 20px;
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      }
+      .card h3 {
+        margin-top: 0;
+        border-left: 4px solid #0f766e;
+        padding-left: 10px;
+      }
+      .info-box,
+      .error-box {
+        border-radius: 10px;
+        padding: 14px;
+        margin-top: 16px;
+      }
+      .info-box {
+        background: #eff6ff;
+        border-left: 4px solid #2563eb;
+      }
+      .error-box {
+        background: #fef2f2;
+        border-left: 4px solid #dc2626;
+        color: #991b1b;
+      }
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .tag {
+        background: #ccfbf1;
+        color: #115e59;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .distribution-list {
+        margin-top: 10px;
+      }
+      .distribution-item {
+        padding: 10px 0;
+        border-bottom: 1px solid #dbe4f0;
+      }
+      .distribution-item:last-child {
+        border-bottom: none;
+      }
+      .distribution-item p {
+        margin: 4px 0;
+      }
+      .result-card {
+        margin-bottom: 20px;
+      }
+      .route-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+        font-size: 13px;
+      }
+      .route-table th,
+      .route-table td {
+        border: 1px solid #e5e7eb;
+        padding: 10px;
+        text-align: left;
+      }
+      .route-table thead tr {
+        background: #f3f4f6;
+      }
+      .route-table tbody tr:nth-child(even) {
+        background: #f9fafb;
+      }
+      .route-table tbody tr.route-row {
+        cursor: pointer;
+      }
+      .route-table tbody tr.route-row:hover,
+      .route-table tbody tr.route-row.active {
+        background: #ccfbf1;
+      }
+      .map-box {
+        height: 420px;
+        border-radius: 12px;
+        border: 1px solid #d1d5db;
+        margin-top: 16px;
+      }
+      .btn-secondary {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        background: #6b7280;
+        color: white;
+        padding: 12px 14px;
+        border-radius: 10px;
+      }
+      .navigation-button {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        background: #16a34a;
+        color: white;
+        font-weight: 700;
+        padding: 12px 14px;
+        border-radius: 10px;
+        margin-top: 12px;
+      }
+      .navigation-button:hover {
+        background: #15803d;
+      }
+      .process-list {
+        margin: 10px 0 0;
+        padding-left: 18px;
+        font-size: 13px;
+      }
+      label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        margin: 14px 0 6px;
+      }
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        background: white;
+        font-size: 14px;
+      }
+      input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        background: white;
+        font-size: 14px;
+      }
+      .ga-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .btn-primary {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        background: #0f766e;
+        color: white;
+        font-weight: 700;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        margin-top: 12px;
+      }
+      .btn-primary:hover {
+        background: #0e6a63;
+      }
+      .btn-link {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        color: #2563eb;
+        font-weight: 600;
+        margin-top: 10px;
+        font-size: 13px;
+      }
+      .hint {
+        color: #64748b;
+        font-size: 12px;
+        margin: 8px 0 0;
+      }
+      @media (max-width: 960px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% include "header.html" %}
+
+    <div class="container">
+      <div class="grid">
+        <aside class="card">
+          <h3>Ringkasan Pemetaan</h3>
+          <a class="btn-secondary" href="/input-pemetaan"
+            >Upload File Pemetaan Baru</a
+          >
+
+          {% if error %}
+          <div class="error-box">{{ error }}</div>
+          {% endif %}
+
+          <div class="info-box">
+            <p><b>File pemetaan:</b> {{ uploaded_file_name }}</p>
+          </div>
+
+          {% if cluster_petugas_list %}
+          <div class="info-box">
+            <form
+              method="GET"
+              action="{{ url_for('hasil_pemetaan') }}"
+              data-loading-text="Menghitung dan menyimpan optimasi kurir..."
+            >
+              <label for="petugas-filter">Pilih Kurir</label>
+              <select
+                id="petugas-filter"
+                name="petugas"
+                onchange="this.form.submit()"
+              >
+                <option value="">-- Pilih Kurir --</option>
+                {% for petugas in cluster_petugas_list %}
+                <option
+                  value="{{ petugas }}"
+                  {% if selected_cluster_petugas == petugas %}selected{% endif %}
+                >
+                  {{ petugas }}
+                </option>
+                {% endfor %}
+              </select>
+            </form>
+          </div>
+
+          <div class="info-box">
+            <form method="GET" action="{{ url_for('hasil_pemetaan') }}">
+              <label>Pengaturan GA</label>
+              {% if selected_cluster_petugas %}
+              <input type="hidden" name="petugas" value="{{ selected_cluster_petugas }}" />
+              {% endif %}
+
+              <div class="ga-grid">
+                <div>
+                  <label for="pop-size" style="margin-top: 0">Pop Size</label>
+                  <input
+                    id="pop-size"
+                    type="number"
+                    name="pop_size"
+                    min="2"
+                    step="1"
+                    value="{{ ga_params.pop_size }}"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="generations" style="margin-top: 0">Generations</label>
+                  <input
+                    id="generations"
+                    type="number"
+                    name="generations"
+                    min="1"
+                    step="1"
+                    value="{{ ga_params.generations }}"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="cr">Cr</label>
+                  <input
+                    id="cr"
+                    type="number"
+                    name="cr"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value="{{ ga_params.crossover_rate }}"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="mr">Mr</label>
+                  <input
+                    id="mr"
+                    type="number"
+                    name="mr"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value="{{ ga_params.mutation_rate }}"
+                    required
+                  />
+                </div>
+              </div>
+
+              <p class="hint">
+                Klik Generate untuk menghitung ulang optimasi kurir (butuh koneksi Google Maps API untuk geocoding).
+              </p>
+
+              <label style="display: block; margin: 10px 0 0; font-size: 13px; font-weight: 600; color: #334155">
+                <input type="checkbox" name="save_defaults" value="1" />
+                Simpan sebagai default
+              </label>
+
+              <button class="btn-primary" type="submit" name="regen" value="1">
+                Generate
+              </button>
+              <button
+                class="btn-secondary"
+                type="button"
+                id="regen-all-btn"
+                style="margin-top: 10px; border: none; cursor: pointer;"
+              >
+                Generate Semua Kurir
+              </button>
+              <a
+                class="btn-link"
+                href="{% if selected_cluster_petugas %}{{ url_for('hasil_pemetaan', petugas=selected_cluster_petugas, ga_reset=1) }}{% else %}{{ url_for('hasil_pemetaan', ga_reset=1) }}{% endif %}"
+              >
+                Reset ke default
+              </a>
+            </form>
+          </div>
+          {% endif %}
+
+        </aside>
+
+        <main>
+          {% if pemetaan_result.results %} {% for result in
+          pemetaan_result.results %} {% set map_index = loop.index0 %}
+          <section class="card result-card">
+            <h3>{{ result.petugas }}</h3>
+            <div class="info-box">
+              <p><b>Jumlah Paket:</b> {{ result.package_count }}</p>
+              <p><b>Total Jarak:</b> {{ result.distance }} km</p>
+              <p><b>Total Waktu:</b> {{ result.time }} menit</p>
+              {% if result.random_baseline %}
+              <p>
+                <b>Baseline Random ({{ result.random_baseline.iterations }} iterasi):</b>
+                {{ result.random_baseline.distance }} km, {{ result.random_baseline.time }} menit
+              </p>
+              {% if result.random_baseline.distance_improvement_pct is not none %}
+              <p>
+                <b>Peningkatan Jarak (vs random):</b>
+                {{ result.random_baseline.distance_improvement_pct|round(2) }}%
+              </p>
+              {% endif %}
+              {% if result.random_baseline.time_improvement_pct is not none %}
+              <p>
+                <b>Peningkatan Waktu (vs random):</b>
+                {{ result.random_baseline.time_improvement_pct|round(2) }}%
+              </p>
+              {% endif %}
+              {% endif %}
+              {% if result.navigation_url %}
+              <a
+                class="navigation-button"
+                href="{{ result.navigation_url }}"
+                target="_blank"
+                rel="noopener"
+              >
+                Mulai Navigasi
+              </a>
+              {% endif %}
+            </div>
+
+            <div id="map-{{ map_index }}" class="map-box"></div>
+
+            <table class="route-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Alamat</th>
+                  <th>No Resi</th>
+                  <th>Nama</th>
+                  <th>Penugasan</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in result.route_data %}
+                <tr
+                  class="route-row"
+                  data-map-index="{{ map_index }}"
+                  data-route-order="{{ loop.index }}"
+                >
+                  <td>{{ loop.index }}</td>
+                  <td>{{ r.alamat_lengkap or r.alamat }}</td>
+                  <td>{{ r.resi }}</td>
+                  <td>{{ r.nama }}</td>
+                  <td>{{ r.kota }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </section>
+          {% endfor %} {% else %}
+          <section
+            class="card"
+            style="text-align: center; color: #6b7280; padding: 40px"
+          >
+            <h3 style="border-left: none; padding-left: 0">
+              {% if cluster_petugas_list %}
+              Pilih Kurir untuk Melihat Hasil Optimasi
+              {% else %}
+              Belum Ada Hasil
+              {% endif %}
+            </h3>
+            <p>
+              {% if cluster_petugas_list %}
+              Alamat sudah dibagi ke kurir. Pilih salah satu kurir pada
+              dropdown, lalu sistem akan menghitung dan menyimpan hasil
+              optimasi rute untuk kurir tersebut.
+              {% else %}
+              Upload file pemetaan baru agar sistem membagi alamat berdasarkan
+              penugasan kurir.
+              {% endif %}
+            </p>
+          </section>
+          {% endif %}
+        </main>
+      </div>
+    </div>
+
+    {% if pemetaan_result.results %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = document.querySelectorAll(".nav-dropdown");
+        const regenAllButton = document.getElementById("regen-all-btn");
+        const gaForm = regenAllButton ? regenAllButton.closest("form") : null;
+
+        dropdowns.forEach((dropdown) => {
+          const trigger = dropdown.querySelector(".nav-trigger");
+          if (!trigger) return;
+
+          trigger.addEventListener("click", function (event) {
+            event.stopPropagation();
+            dropdowns.forEach((item) => {
+              if (item !== dropdown) {
+                item.classList.remove("open");
+              }
+            });
+            dropdown.classList.toggle("open");
+          });
+        });
+
+        document.addEventListener("click", function () {
+          dropdowns.forEach((dropdown) => dropdown.classList.remove("open"));
+        });
+
+        if (regenAllButton && gaForm) {
+          regenAllButton.addEventListener("click", function () {
+            const formData = new FormData(gaForm);
+            formData.delete("regen");
+            formData.set("regen_all", "1");
+            const params = new URLSearchParams();
+            for (const [key, value] of formData.entries()) {
+              if (value === "" || value === null || typeof value === "undefined") continue;
+              params.append(key, value);
+            }
+            window.location.href = `${gaForm.action}?${params.toString()}`;
+          });
+        }
+      });
+
+      const pemetaanResults = {{ pemetaan_result.results | tojson }};
+      const routeMaps = {};
+      const routeMarkers = {};
+
+      function initPemetaanMaps() {
+        pemetaanResults.forEach((result, index) => {
+          const mapId = `map-${index}`;
+          const map = new google.maps.Map(document.getElementById(mapId), {
+            zoom: 13,
+            center: { lat: -7.9829, lng: 112.6303 },
+            gestureHandling: "greedy",
+          });
+          const infoWindow = new google.maps.InfoWindow();
+          const bounds = new google.maps.LatLngBounds();
+          routeMaps[index] = map;
+          routeMarkers[index] = {};
+
+          const latlngs = [];
+          result.map_points.forEach((point, pointIndex) => {
+            const routeOrder = pointIndex + 1;
+            const latlng = { lat: Number(point.lat), lng: Number(point.lng) };
+            latlngs.push(latlng);
+            bounds.extend(latlng);
+
+            const marker = new google.maps.Marker({
+              position: latlng,
+              map,
+              title: `${routeOrder}. ${point.name}`,
+              label: {
+                text: String(routeOrder),
+                color: "white",
+                fontSize: "13px",
+                fontWeight: "700",
+              },
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 16,
+                fillColor: "#0f766e",
+                fillOpacity: 1,
+                strokeColor: "#ffffff",
+                strokeWeight: 2,
+              },
+            });
+
+            marker.addListener("click", () => {
+              infoWindow.setContent(`<b>${routeOrder}. ${point.name}</b>`);
+              infoWindow.open(map, marker);
+            });
+            routeMarkers[index][routeOrder] = marker;
+          });
+
+          if (result.route_geometry && result.route_geometry.length > 0) {
+            const routePath = result.route_geometry.map((coord) => ({
+              lat: Number(coord[0]),
+              lng: Number(coord[1]),
+            }));
+            new google.maps.Polyline({
+              path: routePath,
+              geodesic: true,
+              strokeColor: "#0f766e",
+              strokeOpacity: 0.85,
+              strokeWeight: 4,
+              map,
+            });
+          } else if (latlngs.length > 0) {
+            new google.maps.Polyline({
+              path: latlngs,
+              geodesic: true,
+              strokeColor: "#0f766e",
+              strokeOpacity: 0.85,
+              strokeWeight: 4,
+              map,
+            });
+          }
+
+          if (latlngs.length > 0) {
+            map.fitBounds(bounds, 40);
+          }
+        });
+      }
+
+      document.querySelectorAll(".route-row").forEach((row) => {
+        row.addEventListener("click", function () {
+          const mapIndex = Number(this.dataset.mapIndex);
+          const order = Number(this.dataset.routeOrder);
+          const map = routeMaps[mapIndex];
+          const marker = routeMarkers[mapIndex]?.[order];
+          if (!map || !marker) return;
+
+          document
+            .querySelectorAll(`.route-row[data-map-index="${mapIndex}"].active`)
+            .forEach((activeRow) => activeRow.classList.remove("active"));
+          this.classList.add("active");
+
+          document.getElementById(`map-${mapIndex}`).scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          map.panTo(marker.getPosition());
+          map.setZoom(17);
+          google.maps.event.trigger(marker, "click");
+        });
+      });
+    </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initPemetaanMaps"
+      async
+      defer
+    ></script>
+    {% else %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = document.querySelectorAll(".nav-dropdown");
+
+        dropdowns.forEach((dropdown) => {
+          const trigger = dropdown.querySelector(".nav-trigger");
+          if (!trigger) return;
+
+          trigger.addEventListener("click", function (event) {
+            event.stopPropagation();
+            dropdowns.forEach((item) => {
+              if (item !== dropdown) {
+                item.classList.remove("open");
+              }
+            });
+            dropdown.classList.toggle("open");
+          });
+        });
+
+        document.addEventListener("click", function () {
+          dropdowns.forEach((dropdown) => dropdown.classList.remove("open"));
+        });
+      });
+    </script>
+    {% endif %}
+  </body>
+</html>

@@ -1,0 +1,281 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Input Data - Optimasi Rute Distribusi Paket</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: #f5f7fb;
+        color: #1f2937;
+      }
+
+      /* HEADER */
+      header {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      header .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      header img {
+        height: 48px;
+        background: white;
+        padding: 6px;
+        border-radius: 8px;
+      }
+      header nav {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      header nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: background 0.3s;
+        display: block;
+      }
+      header nav a:hover,
+      header nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown {
+        position: relative;
+      }
+      .nav-trigger {
+        border: none;
+        background: transparent;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: background 0.3s;
+        display: block;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .nav-trigger:hover,
+      .nav-trigger.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown.open .nav-trigger {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 220px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+        padding: 8px;
+        z-index: 10;
+      }
+      .nav-dropdown.align-right .nav-menu {
+        left: auto;
+        right: 0;
+      }
+      .nav-menu a {
+        color: #1f2937;
+      }
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        background: #eff6ff;
+      }
+      .nav-dropdown.open .nav-menu {
+        display: block;
+      }
+      @media (max-width: 900px) {
+        header {
+          align-items: flex-start;
+          gap: 16px;
+          flex-direction: column;
+        }
+        header nav {
+          width: 100%;
+          gap: 12px;
+        }
+        header nav > a,
+        .nav-dropdown {
+          width: 100%;
+        }
+        header nav a,
+        .nav-trigger {
+          width: 100%;
+          text-align: left;
+        }
+        .nav-menu {
+          position: static;
+          margin-top: 8px;
+          width: 100%;
+        }
+      }
+
+      /* MAIN */
+      main {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 30px;
+      }
+
+      .upload-section {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .upload-section h2 {
+        color: #1e3a8a;
+        margin-bottom: 20px;
+      }
+      .upload-section p {
+        color: #6b7280;
+        margin-bottom: 30px;
+      }
+
+      .upload-form {
+        margin-bottom: 30px;
+      }
+      .upload-form input[type="file"] {
+        display: block;
+        margin: 0 auto 20px;
+        padding: 10px;
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        background: #f8fafc;
+        cursor: pointer;
+      }
+      .upload-form button {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .upload-form button:hover {
+        background: #1d4ed8;
+      }
+
+      .info {
+        background: #eff6ff;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #2563eb;
+        text-align: left;
+      }
+      .info h3 {
+        color: #1e3a8a;
+        margin-bottom: 10px;
+      }
+      .info ul {
+        color: #374151;
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .error {
+        background: #fef2f2;
+        color: #991b1b;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #fecaca;
+      }
+    </style>
+  </head>
+  <body>
+    {% include "header.html" %}
+
+    <main>
+      <div class="upload-section">
+        <h2>Input Data Historis CSV / Excel</h2>
+        <p>
+          Unggah file historis CSV atau Excel untuk melihat hasil berdasarkan
+          tanggal dan kurir. Data historis ini terpisah dari file yang dipakai
+          pada fitur input pemetaan.
+        </p>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form
+          class="upload-form"
+          method="post"
+          enctype="multipart/form-data"
+          data-loading-text="Mengunggah dan memproses data historis..."
+        >
+          <input type="file" name="file" accept=".csv,.xlsx,.xls" required />
+          <button type="submit">Unggah dan Proses</button>
+        </form>
+
+        <div class="info">
+          <h3>Format File CSV / Excel</h3>
+          <ul>
+            <li>
+              Kolom wajib: Petugas, Tgl_Antaran_Pertama, Alamat, No_Resi, Nama
+            </li>
+            <li>File ini hanya digunakan untuk menu Data Historis</li>
+            <li>Format tanggal: YYYY-MM-DD</li>
+            <li>Alamat harus lengkap dan akurat untuk geocoding</li>
+            <li>File dapat berupa .csv, .xlsx, atau .xls</li>
+            <li>Struktur kolom CSV harus sama dengan file Excel</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = document.querySelectorAll(".nav-dropdown");
+
+        dropdowns.forEach((dropdown) => {
+          const trigger = dropdown.querySelector(".nav-trigger");
+          if (!trigger) return;
+
+          trigger.addEventListener("click", function (event) {
+            event.stopPropagation();
+            dropdowns.forEach((item) => {
+              if (item !== dropdown) {
+                item.classList.remove("open");
+              }
+            });
+            dropdown.classList.toggle("open");
+          });
+        });
+
+        document.addEventListener("click", function () {
+          dropdowns.forEach((dropdown) => dropdown.classList.remove("open"));
+        });
+      });
+    </script>
+  </body>
+</html>

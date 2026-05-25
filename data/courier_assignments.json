@@ -1,0 +1,382 @@
+[
+  {
+    "id": "09999322-586d-458d-834a-4b6e6668fc1c",
+    "petugas": "Ridho Eko Ariyanto",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, SAWOJAJAR"
+  },
+  {
+    "id": "c5681c79-38ca-4a75-b75e-65abda5f0168",
+    "petugas": "Ridho Eko Ariyanto",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, BUMIAYU"
+  },
+  {
+    "id": "23f89326-1f98-45ea-8b8d-968a3df126f4",
+    "petugas": "Ridho Eko Ariyanto",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, KOTALAMA"
+  },
+  {
+    "id": "d6722328-cf3d-462a-b510-d6a56aff97d1",
+    "petugas": "Ridho Eko Ariyanto",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, MERGOSONO"
+  },
+  {
+    "id": "eee20027-865b-405f-8a8a-0839f9cfc1a1",
+    "petugas": "Ridho Eko Ariyanto",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, LESANPURO"
+  },
+  {
+    "id": "7d476d6c-c5e5-4a51-bb4e-f8e6c29efd63",
+    "petugas": "Ridho Eko Ariyanto",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, ARJOWINANGUN"
+  },
+  {
+    "id": "d94316c1-561a-40a5-a888-5f2d1bfec736",
+    "petugas": "Ridho Eko Ariyanto",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, BURING"
+  },
+  {
+    "id": "aa1dfb47-8042-4d1d-8c58-a42023ec817f",
+    "petugas": "Ridho Eko Ariyanto",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, MADYOPURO"
+  },
+  {
+    "id": "fc5b90ad-8691-4dd5-ba01-abd9f2154e78",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, BLIMBING"
+  },
+  {
+    "id": "337443f7-29cb-444e-a3a0-a1722662cc28",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, POLEHAN"
+  },
+  {
+    "id": "c0ccc3ad-8a1b-44f7-be7b-9a3d4fea5d08",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, PANDANWANGI"
+  },
+  {
+    "id": "bef82939-2b27-4198-a31e-e9ac623c7b41",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, ARJOSARI"
+  },
+  {
+    "id": "44c340e6-88c7-49f2-9333-2483c1b73b43",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, PURWODADI"
+  },
+  {
+    "id": "b0c3da34-8f6e-48cc-af34-8d1d1b46ca56",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, PURWANTORO"
+  },
+  {
+    "id": "1f8d5173-e7f1-4ec3-a5fd-767bf82cfa9e",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, KESATRIAN"
+  },
+  {
+    "id": "2860428a-2db0-46da-903a-5529ad5e8eb5",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, BUNULREJO"
+  },
+  {
+    "id": "2b5f7cc4-6050-4e2c-a3df-a5f0a11f3e79",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, BALEARJOSARI"
+  },
+  {
+    "id": "565edf7a-e98c-41f0-b5fb-660a0ef2a175",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, POLOWIJEN"
+  },
+  {
+    "id": "e36c7ffd-68bc-408f-9c53-ac71156fa29e",
+    "petugas": "A Luthfi Pratama",
+    "penugasan": "KOTA MALANG, BLIMBING, JODIPAN"
+  },
+  {
+    "id": "9a56f1b8-24f4-452a-8e5e-010ee82c2c84",
+    "petugas": "Ahmad Najib",
+    "penugasan": "KOTA MALANG, SUKUN, SUKUN"
+  },
+  {
+    "id": "024c1438-ae97-43b5-bb64-1c53738bbd16",
+    "petugas": "Ahmad Najib",
+    "penugasan": "KOTA MALANG, SUKUN, CIPTOMULYO"
+  },
+  {
+    "id": "1f1169ae-0ec8-4117-bce0-675687f740d3",
+    "petugas": "Ahmad Najib",
+    "penugasan": "KOTA MALANG, SUKUN, PISANGCANDI"
+  },
+  {
+    "id": "0af2a34c-c347-4f6d-aad8-afaad212f99f",
+    "petugas": "Ahmad Najib",
+    "penugasan": "KOTA MALANG, SUKUN, BANDULAN"
+  },
+  {
+    "id": "eaf8fbcd-9836-4cf4-9164-d30cf01094ef",
+    "petugas": "Ahmad Najib",
+    "penugasan": "KOTA MALANG, SUKUN, GADANG"
+  },
+  {
+    "id": "c8bec6c6-427e-4b22-be15-c12beb889d32",
+    "petugas": "Chamdan Nurhaqiqi",
+    "penugasan": "KOTA MALANG, LOWOKWARU, TUNGGULWULUNG"
+  },
+  {
+    "id": "8b10a9bd-f80b-49ae-83dc-ae8e8a306d92",
+    "petugas": "Chamdan Nurhaqiqi",
+    "penugasan": "KOTA MALANG, LOWOKWARU, TUNJUNGSEKAR"
+  },
+  {
+    "id": "4cae8cad-301d-4eac-9351-f8003dcfd92d",
+    "petugas": "Chamdan Nurhaqiqi",
+    "penugasan": "KOTA MALANG, LOWOKWARU, MERJOSARI"
+  },
+  {
+    "id": "ce7ab5e3-628d-4709-92a8-746a3fdbc3bf",
+    "petugas": "Chamdan Nurhaqiqi",
+    "penugasan": "KOTA MALANG, LOWOKWARU, SUMBERSARI"
+  },
+  {
+    "id": "04e09d27-a205-43f3-ba17-c9a058ca8282",
+    "petugas": "Chamdan Nurhaqiqi",
+    "penugasan": "KOTA MALANG, LOWOKWARU, DINOYO"
+  },
+  {
+    "id": "8b0e92fa-51b1-474f-9b88-1c82d5fed2bc",
+    "petugas": "Chamdan Nurhaqiqi",
+    "penugasan": "KOTA MALANG, LOWOKWARU, MOJOLANGU"
+  },
+  {
+    "id": "8469b975-e449-4493-9628-2ca7195bd45b",
+    "petugas": "Chamdan Nurhaqiqi",
+    "penugasan": "KOTA MALANG, LOWOKWARU, TLOGOMAS"
+  },
+  {
+    "id": "5ab1cd40-30a7-4d7c-818b-04aee787f432",
+    "petugas": "Chamdan Nurhaqiqi",
+    "penugasan": "KOTA MALANG, LOWOKWARU, JATIMULYO"
+  },
+  {
+    "id": "a8b60c3e-e45b-4144-81b8-ac118e22c23d",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, BLIMBING"
+  },
+  {
+    "id": "621b5824-0eec-4380-83af-145f1f4fa61f",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, POLEHAN"
+  },
+  {
+    "id": "a1a90d09-94e5-4417-9228-6bcbd0477b89",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, PANDANWANGI"
+  },
+  {
+    "id": "594dd8b9-ec62-4c2f-8746-a1e3fb2a31fe",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, ARJOSARI"
+  },
+  {
+    "id": "395206bb-9574-4040-ac26-caccee0300d5",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, PURWODADI"
+  },
+  {
+    "id": "16d72cfe-65ee-4098-a657-2cd72ea0f4ff",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, PURWANTORO"
+  },
+  {
+    "id": "a550dde0-5185-4dbf-8ae9-63ab17165942",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, KESATRIAN"
+  },
+  {
+    "id": "5415df98-06fd-4c82-b739-c53c1da02364",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, BUNULREJO"
+  },
+  {
+    "id": "69e7f2c9-1c93-4993-800e-831937cb62f4",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, BALEARJOSARI"
+  },
+  {
+    "id": "49e8037a-d03a-4fa2-9a7f-e05ab7df1781",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, POLOWIJEN"
+  },
+  {
+    "id": "4a854c31-914f-4b47-ae59-cded4482e9bb",
+    "petugas": "Deni Hariono",
+    "penugasan": "KOTA MALANG, BLIMBING, JODIPAN"
+  },
+  {
+    "id": "66095e15-4a12-4fba-a3c8-c32ddf67bf6a",
+    "petugas": "Perdata Purba Dermawan",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, SAWOJAJAR"
+  },
+  {
+    "id": "0f26e6eb-61e2-4bf1-a3fe-d938ad98a57f",
+    "petugas": "Perdata Purba Dermawan",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, BUMIAYU"
+  },
+  {
+    "id": "6ad584ba-3d44-4909-8788-de7c510887b9",
+    "petugas": "Perdata Purba Dermawan",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, KOTALAMA"
+  },
+  {
+    "id": "bcb7dc3d-663c-4839-bb72-51e6c1319942",
+    "petugas": "Perdata Purba Dermawan",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, MERGOSONO"
+  },
+  {
+    "id": "7ac3387f-4285-4e80-a464-31c2e84d80bb",
+    "petugas": "Perdata Purba Dermawan",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, LESANPURO"
+  },
+  {
+    "id": "9c2ccbd6-de27-4f61-b3c4-9e3a9e12941a",
+    "petugas": "Perdata Purba Dermawan",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, ARJOWINANGUN"
+  },
+  {
+    "id": "802b86c9-f001-4592-a0ec-0a62a1eee4be",
+    "petugas": "Perdata Purba Dermawan",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, BURING"
+  },
+  {
+    "id": "f714367e-8268-446d-bdfb-6622f33d9c76",
+    "petugas": "Perdata Purba Dermawan",
+    "penugasan": "KOTA MALANG, KEDUNGKANDANG, MADYOPURO"
+  },
+  {
+    "id": "a5dd6410-ae70-498e-bc55-22a720da9be6",
+    "petugas": "Imam Wahyudi",
+    "penugasan": "KOTA MALANG, SUKUN, SUKUN"
+  },
+  {
+    "id": "91cdda04-84e2-4c03-b4b6-92b8a19dca03",
+    "petugas": "Imam Wahyudi",
+    "penugasan": "KOTA MALANG, SUKUN, CIPTOMULYO"
+  },
+  {
+    "id": "3bee0e8e-d4aa-4286-9fe8-e9878241b90e",
+    "petugas": "Imam Wahyudi",
+    "penugasan": "KOTA MALANG, SUKUN, PISANGCANDI"
+  },
+  {
+    "id": "f71a134a-bfc6-40ce-83d8-3056bcb4d82b",
+    "petugas": "Imam Wahyudi",
+    "penugasan": "KOTA MALANG, SUKUN, BANDULAN"
+  },
+  {
+    "id": "ceb5772e-8786-4774-9a3b-607bbb8c15a5",
+    "petugas": "Imam Wahyudi",
+    "penugasan": "KOTA MALANG, SUKUN, GADANG"
+  },
+  {
+    "id": "033d6784-7d43-46fb-b348-e82b2e44d0c6",
+    "petugas": "Andi Purwanto",
+    "penugasan": "KOTA MALANG, LOWOKWARU, TUNGGULWULUNG"
+  },
+  {
+    "id": "af9cefda-ec18-42fb-a4a7-097de5d3210f",
+    "petugas": "Andi Purwanto",
+    "penugasan": "KOTA MALANG, LOWOKWARU, TUNJUNGSEKAR"
+  },
+  {
+    "id": "c8b83758-0f63-43cc-a52d-f08151ad12bd",
+    "petugas": "Andi Purwanto",
+    "penugasan": "KOTA MALANG, LOWOKWARU, MERJOSARI"
+  },
+  {
+    "id": "89f63918-cf53-4e04-a37e-f1c37606893f",
+    "petugas": "Andi Purwanto",
+    "penugasan": "KOTA MALANG, LOWOKWARU, SUMBERSARI"
+  },
+  {
+    "id": "cc3f46dc-c103-494c-bfb1-76bd5a0b7ed8",
+    "petugas": "Andi Purwanto",
+    "penugasan": "KOTA MALANG, LOWOKWARU, DINOYO"
+  },
+  {
+    "id": "115e6418-7feb-4326-bb3d-2f1feed258f3",
+    "petugas": "Andi Purwanto",
+    "penugasan": "KOTA MALANG, LOWOKWARU, MOJOLANGU"
+  },
+  {
+    "id": "3490bb73-0e94-44ab-b5a2-7a9171f651b8",
+    "petugas": "Andi Purwanto",
+    "penugasan": "KOTA MALANG, LOWOKWARU, TLOGOMAS"
+  },
+  {
+    "id": "ab5e4614-a603-4c5c-8969-1984e4cb8459",
+    "petugas": "Andi Purwanto",
+    "penugasan": "KOTA MALANG, LOWOKWARU, JATIMULYO"
+  },
+  {
+    "id": "a868fadf-3185-4c60-be5d-44015f23a6b3",
+    "petugas": "Deva Putra Ramadhan",
+    "penugasan": "KOTA MALANG, KLOJEN, KLOJEN"
+  },
+  {
+    "id": "5e107c1e-0064-4ed7-9b48-551362e01363",
+    "petugas": "Deva Putra Ramadhan",
+    "penugasan": "KOTA MALANG, KLOJEN, GADING KASRI"
+  },
+  {
+    "id": "b759c4be-42be-4258-869e-784a0aec9718",
+    "petugas": "Deva Putra Ramadhan",
+    "penugasan": "KOTA MALANG, KLOJEN, PENANGGUNGAN"
+  },
+  {
+    "id": "80c3e201-8642-4522-a83a-930ba8747e86",
+    "petugas": "Deva Putra Ramadhan",
+    "penugasan": "KOTA MALANG, KLOJEN, KAUMAN"
+  },
+  {
+    "id": "95cba5b4-a377-42f2-b1ba-64c15c77f762",
+    "petugas": "Deva Putra Ramadhan",
+    "penugasan": "KOTA MALANG, KLOJEN, SAMAAN"
+  },
+  {
+    "id": "029c1611-0f76-4141-add7-63920fa3f051",
+    "petugas": "Deva Putra Ramadhan",
+    "penugasan": "KOTA MALANG, KLOJEN, KIDULDALEM"
+  },
+  {
+    "id": "4ecd2e84-1ecd-4ecc-81d0-354983e9ca7d",
+    "petugas": "Nugroho Meisar Sriwidodo",
+    "penugasan": "KOTA MALANG, KLOJEN, KLOJEN"
+  },
+  {
+    "id": "4e99f682-27c2-46a0-bab8-fa3a26763fae",
+    "petugas": "Nugroho Meisar Sriwidodo",
+    "penugasan": "KOTA MALANG, KLOJEN, GADING KASRI"
+  },
+  {
+    "id": "cc2d7793-8b0d-4b25-bb19-8779cfdc4da6",
+    "petugas": "Nugroho Meisar Sriwidodo",
+    "penugasan": "KOTA MALANG, KLOJEN, PENANGGUNGAN"
+  },
+  {
+    "id": "895e1fb5-90f6-4192-94d3-487db4b07ef5",
+    "petugas": "Nugroho Meisar Sriwidodo",
+    "penugasan": "KOTA MALANG, KLOJEN, KAUMAN"
+  },
+  {
+    "id": "5d523c11-e604-4441-8ba1-3cdc8426371c",
+    "petugas": "Nugroho Meisar Sriwidodo",
+    "penugasan": "KOTA MALANG, KLOJEN, SAMAAN"
+  },
+  {
+    "id": "9204e781-45ef-4b0f-b42c-1d10fef5b608",
+    "petugas": "Nugroho Meisar Sriwidodo",
+    "penugasan": "KOTA MALANG, KLOJEN, KIDULDALEM"
+  }
+]

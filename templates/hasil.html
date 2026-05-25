@@ -1,0 +1,694 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hasil Optimasi Rute - Sistem Optimasi Rute Pengiriman Paket</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: #f5f7fb;
+        color: #1f2937;
+      }
+
+      /* HEADER */
+      header {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      header .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      header img {
+        height: 48px;
+        background: white;
+        padding: 6px;
+        border-radius: 8px;
+      }
+      header h1 {
+        font-size: 22px;
+        margin: 0;
+        font-weight: 600;
+      }
+      header span {
+        font-size: 13px;
+        opacity: 0.85;
+      }
+      header nav {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      header nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: background 0.3s;
+        display: block;
+      }
+      header nav a:hover,
+      header nav a.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown {
+        position: relative;
+      }
+      .nav-trigger {
+        border: none;
+        background: transparent;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: background 0.3s;
+        display: block;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .nav-trigger:hover,
+      .nav-trigger.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-dropdown.open .nav-trigger {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .nav-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        min-width: 220px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+        padding: 8px;
+        z-index: 10;
+      }
+      .nav-dropdown.align-right .nav-menu {
+        left: auto;
+        right: 0;
+      }
+      .nav-menu a {
+        color: #1f2937;
+      }
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        background: #eff6ff;
+      }
+      .nav-dropdown.open .nav-menu {
+        display: block;
+      }
+      @media (max-width: 900px) {
+        header {
+          align-items: flex-start;
+          gap: 16px;
+          flex-direction: column;
+        }
+        header nav {
+          width: 100%;
+          gap: 12px;
+        }
+        header nav > a,
+        .nav-dropdown {
+          width: 100%;
+        }
+        header nav a,
+        .nav-trigger {
+          width: 100%;
+          text-align: left;
+        }
+        .nav-menu {
+          position: static;
+          margin-top: 8px;
+          width: 100%;
+        }
+      }
+
+      /* CONTAINER */
+      .container {
+        max-width: 1400px;
+        margin: auto;
+        padding: 25px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        gap: 20px;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* CARD */
+      .card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .card h3 {
+        margin-top: 0;
+        margin-bottom: 16px;
+        font-size: 18px;
+        border-left: 4px solid #2563eb;
+        padding-left: 10px;
+        font-weight: 600;
+      }
+
+      label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        margin-top: 12px;
+        margin-bottom: 6px;
+      }
+
+      select,
+      input[type="file"],
+      button {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        margin: 8px 0;
+        font-size: 14px;
+      }
+
+      select {
+        cursor: pointer;
+        background: white;
+      }
+
+      select:disabled {
+        background: #f3f4f6;
+        color: #9ca3af;
+        cursor: not-allowed;
+      }
+
+      button {
+        background: #2563eb;
+        color: white;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      button:hover {
+        background: #1d4ed8;
+      }
+
+      button:disabled {
+        background: #d1d5db;
+        cursor: not-allowed;
+      }
+
+      .btn-secondary {
+        background: #6b7280;
+      }
+
+      .btn-secondary:hover {
+        background: #4b5563;
+      }
+
+      #map {
+        height: 600px;
+        border-radius: 12px;
+        border: 1px solid #ddd;
+      }
+
+      .result-info {
+        margin-top: 20px;
+        padding: 16px;
+        background: #f0f9ff;
+        border-left: 4px solid #0284c7;
+        border-radius: 8px;
+      }
+
+      .result-info h4 {
+        margin: 0 0 12px 0;
+        font-size: 16px;
+        color: #0c4a6e;
+      }
+
+      .result-info p {
+        margin: 6px 0;
+        font-size: 14px;
+        color: #0c4a6e;
+      }
+
+      .result-info b {
+        font-weight: 600;
+      }
+
+      .process-list {
+        margin: 10px 0 0;
+        padding-left: 18px;
+        color: #0c4a6e;
+        font-size: 13px;
+      }
+
+      .navigation-button {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        background: #16a34a;
+        color: white;
+        font-weight: 700;
+        padding: 12px 14px;
+        border-radius: 8px;
+        margin-top: 12px;
+      }
+
+      .navigation-button:hover {
+        background: #15803d;
+      }
+
+      .route-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+        font-size: 13px;
+      }
+
+      .route-table thead tr {
+        background: #f3f4f6;
+      }
+
+      .route-table th,
+      .route-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+      }
+
+      .route-table tbody tr:nth-child(even) {
+        background: #f9fafb;
+      }
+
+      .route-table tbody tr.route-row {
+        cursor: pointer;
+      }
+
+      .route-table tbody tr.route-row:hover,
+      .route-table tbody tr.route-row.active {
+        background: #dbeafe;
+      }
+
+      .error-box {
+        background: #fef2f2;
+        border: 1px solid #f87171;
+        border-left: 4px solid #dc2626;
+        border-radius: 8px;
+        padding: 16px;
+        color: #991b1b;
+        margin-bottom: 16px;
+      }
+
+      .error-box h4 {
+        margin-top: 0;
+        color: #991b1b;
+      }
+
+      .loading {
+        color: #0284c7;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% include "header.html" %}
+
+    <div class="container">
+      <!-- SIDEBAR FILTER & CONTROL -->
+      <div class="grid">
+        <div>
+          <div class="card">
+            <h3>Filter & Kontrol</h3>
+
+            <!-- UPLOAD FILE BARU -->
+            <form
+              method="POST"
+              action="{{ url_for('reset') }}"
+              data-loading-text="Menyiapkan upload file baru..."
+            >
+              <button type="submit" class="btn-secondary">
+                Upload File Baru
+              </button>
+            </form>
+
+            <!-- ERROR MESSAGE -->
+            {% if error %}
+            <div class="error-box">
+              <h4>Peringatan</h4>
+              <p>{{ error }}</p>
+            </div>
+            {% endif %}
+
+            <!-- FILTER TANGGAL -->
+            {% if tgl_list %}
+            <form
+              method="GET"
+              action="{{ url_for('hasil') }}"
+              id="filterForm"
+              data-loading-text="Menghitung dan memuat hasil optimasi..."
+            >
+              <label for="tgl-select">Tanggal Antaran Pertama</label>
+              <select
+                name="tgl"
+                id="tgl-select"
+                required
+                onchange="updatePetugas()"
+              >
+                <option value="">-- Pilih Tanggal --</option>
+                {% for t in tgl_list %}
+                <option
+                  value="{{ t }}"
+                  {% if selected_tgl == t %}selected{% endif %}
+                >
+                  {{ t }}
+                </option>
+                {% endfor %}
+              </select>
+
+              <label for="petugas-select">Pilih Kurir</label>
+              <select
+                name="petugas"
+                id="petugas-select"
+                {% if not selected_tgl %}disabled{% endif %}
+                onchange="document.getElementById('filterForm').submit()"
+              >
+                <option value="">-- Pilih Kurir --</option>
+                {% for p in petugas_filter_list %}
+                <option
+                  value="{{ p }}"
+                  {% if selected_petugas == p %}selected{% endif %}
+                >
+                  {{ p }}
+                </option>
+                {% endfor %}
+              </select>
+            </form>
+            {% endif %}
+
+            <!-- INFORMASI FILE -->
+            {% if uploaded_file_name %}
+            <div class="result-info">
+              <h4>File Aktif</h4>
+              <p><b>{{ uploaded_file_name }}</b></p>
+              <p style="font-size: 12px; margin-top: 8px">
+                Optimasi selesai dan data siap ditampilkan
+              </p>
+            </div>
+            {% endif %}
+
+            <!-- STATISTIK FILTER -->
+            {% if result %}
+            <div class="result-info">
+              <h4>Ringkasan Rute</h4>
+              <p><b>Tanggal:</b> {{ result.tanggal }}</p>
+              <p><b>Kurir:</b> {{ result.petugas }}</p>
+              <p><b>Jumlah Paket:</b> {{ result.package_count }}</p>
+              <p><b>Total Jarak:</b> {{ result.distance }} km</p>
+              <p><b>Total Waktu:</b> {{ result.time }} menit</p>
+              {% if result.random_baseline %}
+              <p>
+                <b>Baseline Random ({{ result.random_baseline.iterations }} iterasi):</b>
+                {{ result.random_baseline.distance }} km, {{ result.random_baseline.time }} menit
+              </p>
+              {% if result.random_baseline.distance_improvement_pct is not none %}
+              <p>
+                <b>Peningkatan Jarak (vs random):</b>
+                {{ result.random_baseline.distance_improvement_pct|round(2) }}%
+              </p>
+              {% endif %}
+              {% if result.random_baseline.time_improvement_pct is not none %}
+              <p>
+                <b>Peningkatan Waktu (vs random):</b>
+                {{ result.random_baseline.time_improvement_pct|round(2) }}%
+              </p>
+              {% endif %}
+              {% endif %}
+              {% if result.navigation_url %}
+              <a
+                class="navigation-button"
+                href="{{ result.navigation_url }}"
+                target="_blank"
+                rel="noopener"
+              >
+                Mulai Navigasi
+              </a>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- MAIN CONTENT AREA -->
+        <div>
+          <!-- PETA -->
+          {% if result and map_points %}
+          <div class="card">
+            <h3>Peta Rute Pengiriman</h3>
+            <div id="map"></div>
+
+            <!-- RINCIAN RUTE -->
+            <h3 style="margin-top: 20px">Rincian Rute Pengiriman</h3>
+            <table class="route-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Alamat</th>
+                  <th>Wilayah</th>
+                  <th>No Resi</th>
+                  <th>Nama Penerima</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in route_data %}
+                <tr class="route-row" data-route-order="{{ loop.index }}">
+                  <td>{{ loop.index }}</td>
+                  <td>{{ r.alamat_lengkap or r.alamat }}</td>
+                  <td>{{ r.kota }}</td>
+                  <td>{{ r.resi }}</td>
+                  <td>{{ r.nama }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% elif selected_tgl and selected_petugas and not result %}
+          <div class="card" style="background: #f0f9ff">
+            <h3>Memproses...</h3>
+            <p class="loading">
+              Mohon tunggu, sedang menampilkan data rute untuk kurir ini...
+            </p>
+          </div>
+          {% else %}
+          <div
+            class="card"
+            style="
+              background: #f9fafb;
+              color: #6b7280;
+              text-align: center;
+              padding: 40px;
+            "
+          >
+            <h3 style="color: #6b7280; margin-bottom: 16px">
+              Mulai di Sini
+            </h3>
+            <p>
+              Silakan pilih tanggal antaran dan kurir dari panel filter di
+              sebelah kiri untuk melihat peta rute dan rincian pengiriman.
+            </p>
+            <p style="font-size: 12px; margin-top: 20px">
+              Optimasi GA telah dijalankan saat Anda upload file Excel
+            </p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPT UNTUK PETA -->
+    {% if result and map_points %}
+    <script>
+      function initHasilMap() {
+        const mapPoints = {{ map_points | tojson }};
+        const routeGeometry = {{ route_geometry | tojson }};
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 13,
+          center: { lat: -7.9829, lng: 112.6303 },
+          gestureHandling: "greedy",
+        });
+        const infoWindow = new google.maps.InfoWindow();
+        const bounds = new google.maps.LatLngBounds();
+        const markersByOrder = {};
+
+        const latlngs = [];
+        mapPoints.forEach((point, index) => {
+          const routeOrder = index + 1;
+          const latlng = { lat: Number(point.lat), lng: Number(point.lng) };
+          latlngs.push(latlng);
+          bounds.extend(latlng);
+
+          const marker = new google.maps.Marker({
+            position: latlng,
+            map,
+            title: `${routeOrder}. ${point.name}`,
+            label: {
+              text: String(routeOrder),
+              color: "white",
+              fontSize: "13px",
+              fontWeight: "700",
+            },
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: 16,
+              fillColor: "#2563eb",
+              fillOpacity: 1,
+              strokeColor: "#ffffff",
+              strokeWeight: 2,
+            },
+          });
+
+          marker.addListener("click", () => {
+            infoWindow.setContent(`<b>${routeOrder}. ${point.name}</b>`);
+            infoWindow.open(map, marker);
+          });
+          markersByOrder[routeOrder] = marker;
+        });
+
+        if (routeGeometry && routeGeometry.length > 0) {
+          const routePath = routeGeometry.map((coord) => ({
+            lat: Number(coord[0]),
+            lng: Number(coord[1]),
+          }));
+          new google.maps.Polyline({
+            path: routePath,
+            geodesic: true,
+            strokeColor: "#2563eb",
+            strokeOpacity: 0.8,
+            strokeWeight: 3,
+            map,
+          });
+        } else if (latlngs.length > 0) {
+          new google.maps.Polyline({
+            path: latlngs,
+            geodesic: true,
+            strokeColor: "#2563eb",
+            strokeOpacity: 0.8,
+            strokeWeight: 3,
+            map,
+          });
+        }
+
+        if (latlngs.length > 0) {
+          map.fitBounds(bounds, 50);
+        }
+
+        document.querySelectorAll(".route-row").forEach((row) => {
+          row.addEventListener("click", function () {
+            const order = Number(this.dataset.routeOrder);
+            const marker = markersByOrder[order];
+            if (!marker) return;
+
+            document
+              .querySelectorAll(".route-row.active")
+              .forEach((activeRow) => activeRow.classList.remove("active"));
+            this.classList.add("active");
+
+            document.getElementById("map").scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+            map.panTo(marker.getPosition());
+            map.setZoom(17);
+            google.maps.event.trigger(marker, "click");
+          });
+        });
+      }
+    </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initHasilMap"
+      async
+      defer
+    ></script>
+    {% endif %}
+
+    <!-- SCRIPT UNTUK UPDATE FILTER KURIR -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdowns = document.querySelectorAll(".nav-dropdown");
+
+        dropdowns.forEach((dropdown) => {
+          const trigger = dropdown.querySelector(".nav-trigger");
+          if (!trigger) return;
+
+          trigger.addEventListener("click", function (event) {
+            event.stopPropagation();
+            dropdowns.forEach((item) => {
+              if (item !== dropdown) {
+                item.classList.remove("open");
+              }
+            });
+            dropdown.classList.toggle("open");
+          });
+        });
+
+        document.addEventListener("click", function () {
+          dropdowns.forEach((dropdown) => dropdown.classList.remove("open"));
+        });
+      });
+
+      function updatePetugas() {
+        const tglSelect = document.getElementById("tgl-select").value;
+        const petugasSelect = document.getElementById("petugas-select");
+        const filterForm = document.getElementById("filterForm");
+
+        if (!petugasSelect) {
+          return;
+        }
+
+        if (tglSelect) {
+          petugasSelect.disabled = false;
+          petugasSelect.value = "";
+          if (filterForm) {
+            filterForm.submit();
+          }
+        } else {
+          petugasSelect.disabled = true;
+          petugasSelect.value = "";
+        }
+      }
+    </script>
+  </body>
+</html>
