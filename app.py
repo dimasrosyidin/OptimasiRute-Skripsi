@@ -90,7 +90,7 @@ def setup_terminal_file_logging():
 
 setup_terminal_file_logging()
 
-GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "AIzaSyAUjqeqEuEi2A2x6litKyxjA0QKhyac5lo").strip()
+GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "AIzaSyCFY4cBDXeuz0AVlat5EvdVEnkkrMaK7_I").strip()
 GEOCODE_CACHE = {}
 MATRIX_CACHE = {}
 ROUTE_GEOMETRY_CACHE = {}
