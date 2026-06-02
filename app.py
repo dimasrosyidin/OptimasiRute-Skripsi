@@ -90,7 +90,7 @@ def setup_terminal_file_logging():
 
 setup_terminal_file_logging()
 
-GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "AIzaSyCFY4cBDXeuz0AVlat5EvdVEnkkrMaK7_I").strip()
+GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "AIzaSyAPbjjAOolCqbQ2G8al1mWPveMkf9_P4z4").strip()
 GEOCODE_CACHE = {}
 MATRIX_CACHE = {}
 ROUTE_GEOMETRY_CACHE = {}
@@ -418,7 +418,6 @@ def normalize_delivery_date(value):
         pass
 
     return text.split()[0]
-
 
 # Menormalisasi teks menjadi key alfanumerik untuk pencocokan yang tahan variasi format.
 def normalize_key(value):
@@ -1610,20 +1609,21 @@ def get_route_geometry(coords_list):
 
 # Menghitung total jarak satu kandidat rute berdasarkan matrix jarak.
 def total_distance(route, matrix):
-    # meter
-    return sum(matrix[route[i]][route[i+1]]
-               for i in range(len(route)-1))
+    return sum(
+        matrix[route[i]][route[i + 1]] * 1000
+        for i in range(len(route) - 1)
+    )
 
-# Menghitung total waktu satu kandidat rute berdasarkan matrix durasi.
 def total_time(route, time_matrix):
-    # menit
-    return sum(time_matrix[route[i]][route[i+1]] / 60
-               for i in range(len(route)-1))
+    return sum(
+        time_matrix[route[i]][route[i + 1]] / 60
+        for i in range(len(route) - 1)
+    )
 
-# Menghitung nilai fitness rute dengan menggabungkan jarak dan waktu.
 def calculate_fitness(route, dist_matrix, time_matrix):
-    D = total_distance(route, dist_matrix)  # meter
-    T = total_time(route, time_matrix)     # menit
+    D = total_distance(route, dist_matrix)
+    T = total_time(route, time_matrix)
+
     return 1000 / (D + T)
 
 def compute_route_totals(route, dist_matrix, time_matrix):
@@ -1970,7 +1970,7 @@ def solve_tsp_path_with_cplex(dist_matrix, start_index=0, time_limit_seconds=30)
     except Exception:
         return _solve_with_cplex_cli()
 
-def random_search_best_route(dist_matrix, time_matrix, iterations=200, start_index=0, seed=None):
+def random_search_best_route(dist_matrix, time_matrix, iterations=990, start_index=0, seed=None):
     if not dist_matrix or not isinstance(dist_matrix, list):
         return [], 0
     n = len(dist_matrix)
@@ -1982,7 +1982,7 @@ def random_search_best_route(dist_matrix, time_matrix, iterations=200, start_ind
     try:
         iterations = int(iterations)
     except Exception:
-        iterations = 200
+        iterations = 990
     iterations = max(1, iterations)
 
     rng = random.Random()
@@ -2095,7 +2095,7 @@ def selection_elitism(pop, fitness, elite):
 
 
 # Memilih parent menggunakan tournament selection.
-def tournament_selection(population, fitness, tournament_size=3):
+def tournament_selection(population, fitness, tournament_size=3): 
     selected_indexes = random.sample(
         range(len(population)),
         min(tournament_size, len(population))
@@ -2119,16 +2119,16 @@ def log_ga_runtime_config(pop_size, generations, crossover_rate, mutation_rate, 
 
 # GA
 # Menjalankan algoritma genetika untuk mencari urutan kunjungan terbaik.
-def genetic_algorithm(coords,
-                      pop_size=GA_POP_SIZE,
-                      generations=GA_GENERATIONS,
-                      crossover_rate=GA_CROSSOVER_RATE, 
-                      mutation_rate=GA_MUTATION_RATE,
-                      seed=None,
-                      quiet=False):
+def genetic_algorithm(
+        coords,
+        pop_size=GA_POP_SIZE,
+        generations=GA_GENERATIONS,
+        crossover_rate=GA_CROSSOVER_RATE,
+        mutation_rate=GA_MUTATION_RATE,
+        seed=None,
+        quiet=False):
 
-    # Jika seed diberikan, hasil GA jadi deterministik untuk kebutuhan eksperimen/debug.
-    # Jika seed=None, GA memakai state random global (akan berubah tiap eksekusi).
+    # Agar hasil bisa direproduksi
     if seed is not None:
         try:
             random.seed(int(seed))
@@ -2136,20 +2136,25 @@ def genetic_algorithm(coords,
             pass
 
     n = len(coords)
+
     dist_matrix, time_matrix = get_matrix(coords)
 
-    population = [[0] + random.sample(range(1, n), n-1)
-                  for _ in range(pop_size)]
+    # Populasi awal
+    population = [
+        [0] + random.sample(range(1, n), n - 1)
+        for _ in range(pop_size)
+    ]
 
     log_ga_runtime_config(
         pop_size,
         generations,
         crossover_rate,
         mutation_rate,
-        quiet=quiet,
+        quiet=quiet
     )
 
     generation_logs = []
+
     fitness_summary = {
         "population_total_fitness": 0,
         "crossover_total_fitness": 0,
@@ -2164,17 +2169,31 @@ def genetic_algorithm(coords,
     }
 
     for gen in range(generations):
-        fitness = [calculate_fitness(ind, dist_matrix, time_matrix) for ind in population]
+
+        # =====================
+        # FITNESS POPULASI AWAL
+        # =====================
+        fitness = [
+            calculate_fitness(ind, dist_matrix, time_matrix)
+            for ind in population
+        ]
+
         population_total_fitness = sum(fitness)
 
+        # =====================
+        # CROSSOVER
+        # =====================
         offspring = []
 
         crossover_iterations = int(crossover_rate * pop_size)
 
         for _ in range(crossover_iterations):
-            p1 = tournament_selection(population, fitness)
-            p2 = tournament_selection(population, fitness)
+
+            # parent dipilih random
+            p1, p2 = random.sample(population, 2)
+
             child = pmx_crossover(p1, p2)
+
             offspring.append(child)
 
         crossover_total_fitness = sum(
@@ -2182,9 +2201,14 @@ def genetic_algorithm(coords,
             for ind in offspring
         ) if offspring else 0
 
+        # =====================
+        # MUTASI
+        # =====================
         mutation_iterations = int(mutation_rate * pop_size)
-        if offspring:
-            for ind in random.sample(offspring, min(mutation_iterations, len(offspring))):
+
+        for _ in range(mutation_iterations):
+            if offspring:
+                ind = random.choice(offspring)
                 swap_mutation(ind)
 
         mutation_total_fitness = sum(
@@ -2192,6 +2216,9 @@ def genetic_algorithm(coords,
             for ind in offspring
         ) if offspring else 0
 
+        # =====================
+        # ELITISM
+        # =====================
         combined = population + offspring
 
         fitness_combined = [
@@ -2205,26 +2232,30 @@ def genetic_algorithm(coords,
             elite=pop_size
         )
 
+        # =====================
+        # LOG GENERASI
+        # =====================
         generation_fitness = [
             calculate_fitness(ind, dist_matrix, time_matrix)
             for ind in population
         ]
 
         generation_total_fitness = sum(generation_fitness)
+
         fitness_summary["population_total_fitness"] += population_total_fitness
         fitness_summary["crossover_total_fitness"] += crossover_total_fitness
         fitness_summary["mutation_total_fitness"] += mutation_total_fitness
         fitness_summary["generation_total_fitness"] += generation_total_fitness
 
-        # Jika quiet=True, hindari menyimpan log per generasi untuk menghemat memori.
-        # Jika quiet=False, simpan semua generasi 1..selesai (tanpa kelipatan).
         if not quiet:
+
             overall_generation_total = (
                 population_total_fitness
                 + crossover_total_fitness
                 + mutation_total_fitness
                 + generation_total_fitness
             )
+
             generation_logs.append({
                 "generation": gen + 1,
                 "population_total_fitness": population_total_fitness,
@@ -2236,16 +2267,38 @@ def genetic_algorithm(coords,
                 "avg_fitness": generation_total_fitness / len(generation_fitness)
             })
 
-    best = max(population, key=lambda r: calculate_fitness(r, dist_matrix, time_matrix))
-    fitness_summary["best_fitness"] = calculate_fitness(best, dist_matrix, time_matrix)
-    fitness_summary["overall_total_fitness"] = (
-        fitness_summary.get("population_total_fitness", 0)
-        + fitness_summary.get("crossover_total_fitness", 0)
-        + fitness_summary.get("mutation_total_fitness", 0)
-        + fitness_summary.get("generation_total_fitness", 0)
+    # =====================
+    # SOLUSI TERBAIK
+    # =====================
+    best = max(
+        population,
+        key=lambda r: calculate_fitness(
+            r,
+            dist_matrix,
+            time_matrix
+        )
     )
 
-    return best, dist_matrix, time_matrix, generation_logs, fitness_summary
+    fitness_summary["best_fitness"] = calculate_fitness(
+        best,
+        dist_matrix,
+        time_matrix
+    )
+
+    fitness_summary["overall_total_fitness"] = (
+        fitness_summary["population_total_fitness"]
+        + fitness_summary["crossover_total_fitness"]
+        + fitness_summary["mutation_total_fitness"]
+        + fitness_summary["generation_total_fitness"]
+    )
+
+    return (
+        best,
+        dist_matrix,
+        time_matrix,
+        generation_logs,
+        fitness_summary
+    )
 
 
 # Menulis ringkasan proses optimasi ke console untuk debugging dan evaluasi.
